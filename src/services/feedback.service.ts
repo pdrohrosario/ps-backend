@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { Feedback } from '@prisma/client';
-import { FeedbackCreationDTO } from 'src/dtos/feedback-creation-dto';
+import { FeedbackCreationDTO } from 'src/dtos/feedback-dto';
 
 @Injectable()
 export class FeedbackService {
@@ -22,8 +22,23 @@ export class FeedbackService {
   ): Promise<Feedback[] | null> {
     return this.prisma.feedback.findMany({
       where: {
-        id: Number(userId)
+        OR: [
+          {
+            parent_id: Number(userId)
+          },
+          {
+            teacher_id: Number(userId)
+          }
+        ],
       },
+      orderBy: [
+        {
+          active: "desc",
+        },
+        {
+          id: "asc",
+        },
+      ]
     });
   }
 
@@ -44,7 +59,7 @@ export class FeedbackService {
   //   });
   // }
 
-  async create(data: FeedbackCreationDTO): Promise<Feedback> {    
+  async create(data: FeedbackCreationDTO): Promise<Feedback> {
     return this.prisma.feedback.create({
       data,
     });
@@ -61,9 +76,14 @@ export class FeedbackService {
     });
   }
 
-  // async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
-  //   return this.prisma.user.delete({
-  //     where,
-  //   });
-  // }
+  async softDeleteFeedback(id: number): Promise<Feedback> {
+    return this.prisma.feedback.update({
+      data: {
+        active: false,
+      },
+      where: {
+        id: Number(id)
+      },
+    });
+  }
 }

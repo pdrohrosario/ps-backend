@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { Feedback } from '@prisma/client';
-import { FeedbackCreationDTO } from 'src/dtos/feedback-creation-dto';
+import { FeedbackCreationDTO } from 'src/dtos/feedback-dto';
 import { FeedbackService } from 'src/services/feedback.service';
 
 @Controller("feedback")
@@ -19,6 +19,13 @@ export class FeedbackController {
     @Body() feedbackData: { response: string; id: number },
   ): Promise<Feedback> {
     return this.feedbackService.update(feedbackData.response, feedbackData.id);
+  }
+
+  @Put("delete/:id")
+  async softDelete(
+    @Param("id") id: number,
+  ): Promise<Feedback> {
+    return this.feedbackService.softDeleteFeedback(id);
   }
 
   @Get(":id")
