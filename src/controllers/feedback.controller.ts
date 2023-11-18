@@ -21,6 +21,13 @@ export class FeedbackController {
     return this.feedbackService.update(feedbackData.response, feedbackData.id);
   }
 
+  @Put("delete/:id")
+  async softDelete(
+    @Param("id") id: number,
+  ): Promise<Feedback> {
+    return this.feedbackService.softDeleteFeedback(id);
+  }
+
   @Get(":id")
   async get(
     @Param("id") id: number,

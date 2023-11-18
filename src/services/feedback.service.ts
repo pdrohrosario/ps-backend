@@ -22,8 +22,23 @@ export class FeedbackService {
   ): Promise<Feedback[] | null> {
     return this.prisma.feedback.findMany({
       where: {
-        id: Number(userId)
+        OR: [
+          {
+            parent_id: Number(userId)
+          },
+          {
+            teacher_id: Number(userId)
+          }
+        ],
       },
+      orderBy: [
+        {
+          active: "desc",
+        },
+        {
+          id: "asc",
+        },
+      ]
     });
   }
 
