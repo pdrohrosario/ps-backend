@@ -26,14 +26,14 @@ export class UserController {
   async getParentByName(
     @Param("name") name: string,
   ): Promise<User[]> {
-    return this.userService.findByName(name, "Pai");
+    return this.userService.getParentByName(name);
   }
 
   @Get("teacher_name/:name")
   async getTeacherByUserName(
     @Param("name") name: string,
   ): Promise<User[]> {
-    return this.userService.findByName(name, "Professor");
+    return this.userService.getTeacherByName(name);
   }
 
   @Post()
