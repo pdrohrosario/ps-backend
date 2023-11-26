@@ -12,4 +12,34 @@ export class ContactService{
             data,
         });
     }
+
+    async getByParentID(
+        userId: number,
+    ): Promise<Contact[] | null> {
+        return this.prisma.contact.findMany({
+        where: {
+            parent_id: Number(userId),
+        },
+        orderBy: [
+            {
+            id: "asc",
+            },
+        ]
+        });
+    }
+
+    async getByTeacherID(
+        userId: number,
+    ): Promise<Contact[] | null> {
+        return this.prisma.contact.findMany({
+        where: {
+            teacher_id: Number(userId),
+        },
+        orderBy: [
+            {
+            id: "asc",
+            },
+        ]
+        });
+    }
 }

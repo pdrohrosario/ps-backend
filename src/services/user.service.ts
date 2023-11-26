@@ -29,14 +29,44 @@ export class UserService {
     });
   }
 
-  async findByName(
+  async getParentByName(
     name: string,
-    profile: string,
   ): Promise<User[] | null> {
     return this.prisma.user.findMany({
       where: {
         name: { contains: name},
-        profile: profile,
+        OR: [
+          {
+            profile: "Professor"
+          },
+          {
+            profile: "professor"
+          }
+        ],
+      },
+    });
+  }
+
+  async getTeacherByName(
+    name: string,
+  ): Promise<User[] | null> {
+    return this.prisma.user.findMany({
+      where: {
+        name: { contains: name},
+        OR: [
+          {
+            profile: "parent"
+          },
+          {
+            profile: "pais"
+          },
+          {
+            profile: "Pai"
+          },
+          {
+            profile: "Pais"
+          }
+        ],
       },
     });
   }
