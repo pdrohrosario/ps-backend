@@ -17,14 +17,14 @@ export class ContactController {
     @Get("parent/:userId")
     async getByParentID(
       @Param("userId") userId: number,
-    ): Promise<Contact[]> {
+    ) {
       return this.contactService.getByParentID(userId);
     }
 
     @Get("teacher/:userId")
     async getByTeacherID(
       @Param("userId") userId: number,
-    ): Promise<Contact[]> {
+    ) {
       return this.contactService.getByTeacherID(userId);
     }
 }
