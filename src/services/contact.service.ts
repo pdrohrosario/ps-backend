@@ -15,8 +15,8 @@ export class ContactService{
 
     async getByParentID(
         userId: number,
-    ): Promise<Contact[] | null> {
-        return this.prisma.contact.findMany({
+    ) {
+        const contact_teachers = await this.prisma.contact.findMany({
         where: {
             parent_id: Number(userId),
         },
@@ -24,14 +24,29 @@ export class ContactService{
             {
             id: "asc",
             },
-        ]
+        ],
+        include: {
+            teacher: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },
+        },
         });
+
+        const teachers = contact_teachers.map((teacher) => ({
+            id: teacher.id,
+            name: teacher.teacher?.name || null,
+          }));
+
+        return teachers;
     }
 
     async getByTeacherID(
         userId: number,
-    ): Promise<Contact[] | null> {
-        return this.prisma.contact.findMany({
+    ) {
+        const contact_parents = await this.prisma.contact.findMany({
         where: {
             teacher_id: Number(userId),
         },
@@ -39,7 +54,22 @@ export class ContactService{
             {
             id: "asc",
             },
-        ]
+        ],
+        include: {
+            parent: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },
+        },
         });
+
+        const parents = contact_parents.map((parent) => ({
+            id: parent.id,
+            name: parent.parent?.name || null,
+          }));
+
+        return parents;
     }
 }
