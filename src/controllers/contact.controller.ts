@@ -27,4 +27,12 @@ export class ContactController {
     ) {
       return this.contactService.getByTeacherID(userId);
     }
+
+    @Get("/:parentId/:teacherId")
+    async getByContactByParentIDAndTeacherID(
+      @Param("parentId") parentId: number,
+      @Param("teacherId") teacherId: number
+    ): Promise<Contact[]> {
+      return this.contactService.getByContactByParentIDAndTeacherID(parentId,teacherId);
+    }
 }
