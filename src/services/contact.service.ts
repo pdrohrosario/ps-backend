@@ -66,10 +66,26 @@ export class ContactService{
         });
 
         const parents = contact_parents.map((parent) => ({
-            id: parent.id,
             name: parent.parent?.name || null,
           }));
 
         return parents;
     }
+
+    async getByContactByParentIDAndTeacherID(
+        parentId: number, teacherId : number
+    ): Promise<Contact[] | null> {
+        return this.prisma.contact.findMany({
+        where: {
+            teacher_id: Number(teacherId),
+            parent_id: Number(parentId)
+        },
+        orderBy: [
+            {
+            id: "asc",
+            },
+        ]
+        });
+    }
+
 }
