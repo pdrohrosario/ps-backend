@@ -86,4 +86,28 @@ export class FeedbackService {
       },
     });
   }
+
+  async getNumberOfFeedbacksOverAYear(parentId: number, teacherId: number): Promise<number> {
+    const agg = await this.prisma.feedback.aggregate(
+      {
+        _count: {
+          _all: true
+        },
+        where: {
+          parent_id: {
+            equals: Number(parentId)
+          },
+          teacher_id: {
+            equals: Number(teacherId)
+          },
+          created_at: {
+            // maior que um ano atrás
+            gte: new Date(new Date().setFullYear(new Date().getFullYear() -1)),
+          }
+        } 
+      }
+    );
+
+    return agg._count._all;
+  }
 }
